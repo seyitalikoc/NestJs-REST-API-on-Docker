@@ -44,8 +44,8 @@ Bu adımlar, projenin yerel ortamda çalışmasını sağlamak için gerekenleri
 GitHub reposunu bilgisayarınıza klonlayarak başlayın.
 
 ```bash
-git clone https://github.com/seyitalikoc/rest-api.git
-cd rest-api
+git clone https://github.com/seyitalikoc/NestJs-REST-API-on-Docker.git
+cd NestJs-REST-API-on-Docker
 ```
 ### Adım 2: Docker'ı Başlatın
 Docker konteynerlerini başlatmak için aşağıdaki komutu kullanın.
