@@ -305,3 +305,12 @@ docker-compose logs
 ├── docker-compose.yml          # Docker Compose yapılandırma dosyası
 └── README.md                   # Proje açıklaması
 ```
+
+## Geliştirici Notları
+
+### **API Güvenliği**
+- **JWT (JSON Web Tokens)**: API erişimi için **JWT** kullanılır. Kullanıcı giriş yaptıktan sonra, her API isteğinde **Authorization** başlığında `Bearer <token>` göndermeniz gerekir.
+  - Token'ın geçerliliği süresi dolduğunda, kullanıcı yeniden giriş yapmak zorunda kalacaktır.
+
+- **Guard**: Bu yapı ile bazı endpointler **JWT TOKEN** olmadan bir dönüş yapmamaktadır. Örnek *"GET http://localhost:3000/user/events"* endpointi bunlardan bir tanesidir.
+
