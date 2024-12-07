@@ -29,7 +29,7 @@ Bu proje, **NestJS** framework'u kullanılarak geliştirilmiş bir **REST API** 
 ## Proje Yapısı
 - **NestJS**: Sunucu tarafında kullanılan backend framework.
 - **Docker**: Projenin veritabanı konteyneri ve uygulama konteynerinin yönetimi.
-- **PostgreSQL (veya MySQL/MongoDB)**: Veritabanı, Docker üzerinde çalışmaktadır.
+- **PostgreSQL**: Veritabanı, Docker üzerinde çalışmaktadır.
 
 ## Başlarken
 
