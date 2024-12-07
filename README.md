@@ -22,52 +22,286 @@
   <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
   [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
 
-## Description
+# NestJS REST API with Dockerized Database
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+Bu proje, **NestJS** framework'u kullanılarak geliştirilmiş bir **REST API** uygulamasıdır. Ayrıca, proje **Docker** üzerinde çalışan bir veritabanına bağlanmaktadır. Veritabanı konteyneri de Docker aracılığıyla yönetilmektedir.
 
-## Installation
+## Proje Yapısı
+- **NestJS**: Sunucu tarafında kullanılan backend framework.
+- **Docker**: Projenin veritabanı konteyneri ve uygulama konteynerinin yönetimi.
+- **PostgreSQL (veya MySQL/MongoDB)**: Veritabanı, Docker üzerinde çalışmaktadır.
 
-```bash
-$ npm install
-```
+## Başlarken
 
-## Running the app
+Bu adımlar, projenin yerel ortamda çalışmasını sağlamak için gerekenleri açıklamaktadır.
 
-```bash
-# development
-$ npm run start
+### Gereksinimler
+- [Node.js](https://nodejs.org/) (LTS versiyon önerilir)
+- [Docker](https://www.docker.com/)
+- [Docker Compose](https://docs.docker.com/compose/)
 
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
-```
-
-## Test
+### Adım 1: Depoyu Klonlayın
+GitHub reposunu bilgisayarınıza klonlayarak başlayın.
 
 ```bash
-# unit tests
-$ npm run test
+git clone https://github.com/seyitalikoc/rest-api.git
+cd rest-api
+```
+### Adım 2: Docker'ı Başlatın
+Docker konteynerlerini başlatmak için aşağıdaki komutu kullanın.
 
-# e2e tests
-$ npm run test:e2e
+```bash
+docker-compose up -d
+```
+Bu komut, docker-compose.yml dosyasına göre Docker konteynerlerini başlatır ve projenizin çalışması için gerekli olan veritabanı konteynerini otomatik olarak oluşturur.
 
-# test coverage
-$ npm run test:cov
+### Adım 3: Bağımlılıkları Yükleyin
+Projede kullanılan npm bağımlılıklarını yüklemek için şu komutu çalıştırın:
+
+```bash
+npm install
 ```
 
-## Support
+### Adım 4: Uygulamayı Çalıştırın
+Uygulamayı yerel ortamda çalıştırmak için aşağıdaki komutu kullanın:
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+```bash
+npm run start:dev
+```
 
-## Stay in touch
+Uygulama, varsayılan olarak http://localhost:3000 adresinde çalışacaktır.
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+### Adım 5: Veritabanı Yapılandırması
+Veritabanı Docker konteyneri çalıştığında, NestJS API'si bu veritabanına bağlanacaktır. Eğer veritabanı bağlantı bilgilerini değiştirmek isterseniz, src/config/database.config.ts veya .env dosyasını düzenleyebilirsiniz.
 
-## License
+## API Kullanımı
+### Başlangıçta Yapılacak İşlemler
+- API'nin düzgün çalışabilmesi için, veritabanındaki gerekli tabloların oluşturulmuş olması gerekir. Bunun için bir migrasyon işlemi yapılabilir.
+- NestJS'te kullanılan ORM (örneğin TypeORM veya Sequelize) ile veritabanı migrasyonlarını çalıştırabilirsiniz.
 
-Nest is [MIT licensed](LICENSE).
+## Kullanılabilir Endpoints (USER)
+
+### 1. `POST /user`
+**Açıklama**: Kullanıcı kayıt yapmak için kullanılır.
+
+- **Yöntem**: POST
+- **URL**: `/user`
+
+#### Gerekli Parametreler:
+- **name**: Kullanıcı adı (String).
+- **username**: Kullanıcının username'i (String).
+- **mail**: Kullanıcının email adresi (String).
+- **password**: Kullanıcının şifresi (String).
+
+#### Örnek İstek:
+```bash
+POST http://localhost:3000/user
+
+{
+  "name": "your-name"
+  "username": "your-username"
+  "mail": "user@example.com",
+  "password": "your-password"
+}
+```
+
+### 2. `POST /user/login`
+**Açıklama**: Kullanıcı girişi yapmak için kullanılır. Başarılı bir girişten sonra, kullanıcıya bir JWT token döner. Bu token, diğer korumalı API uç noktalarına erişim sağlamak için kullanılabilir.
+
+- **Yöntem**: POST
+- **URL**: `/user/login`
+
+#### Gerekli Parametreler:
+- **username**: Kullanıcının kullanıcı adı (String).
+- **password**: Kullanıcının şifresi (String).
+
+#### Örnek İstek:
+```bash
+POST http://localhost:3000/user/login
+
+{
+  "username": "your-username",
+  "password": "your-password"
+}
+```
+
+### 3. `PUT /user`
+**Açıklama**: Kullanıcı bilgilerini güncellemek için kullanılır.
+
+- **Yöntem**: PUT
+- **URL**: `/user`
+
+#### Gerekli Parametreler:
+- **name**: Kullanıcı adı (String).
+- **username**: Kullanıcının username'i (String).
+- **email**: Kullanıcının email adresi (String).
+- **password**: Kullanıcının şifresi (String).
+
+#### Örnek İstek:
+```bash
+PUT http://localhost:3000/user
+
+{
+  "name": "your-name"
+  "username": "new-username"
+  "mail": "user@example.com",
+  "password": "new-password"
+}
+```
+
+### 4. 'GET /user/events'
+**Açıklama**: Kullanıcı kaydolduğu eventleri görmek için kullanır.
+
+- **Yöntem**: GET
+- **URL**: `/user/events`
+
+#### Örnek İstek:
+```bash
+GET http://localhost:3000/user/events
+```
+
+### 5. 'GET /user/eventid:eventId'
+**Açıklama**: Kullanıcı kaydolduğu eventlerin birisinin detaylarını görmek için kullanır.
+
+- **Yöntem**: GET
+- **URL**: `/user/eventid:eventId`
+
+#### Gerekli Parametreler:
+- **eventId**: Kullanıcı kayıtlı olduğu eventlerden birinin id'si (Integer).
+
+#### Örnek İstek:
+```bash
+GET http://localhost:3000/user/eventid1
+```
+
+### 6. 'DELETE /user/eventid:eventId'
+**Açıklama**: Kullanıcı kaydolduğu eventten kaydını silmek için kullanır.
+
+- **Yöntem**: DELETE
+- **URL**: `/user/eventid:eventId`
+
+#### Gerekli Parametreler:
+- **eventId**: Kullanıcı kayıtlı olduğu eventlerden birinin id'si (Integer).
+
+#### Örnek İstek:
+```bash
+DELETE http://localhost:3000/user/eventid1
+```
+
+## Kullanılabilir Endpoints (EVENT)
+
+### 1. 'GET /event'
+**Açıklama**: Tüm eventleri döndürür.
+
+- **Yöntem**: GET
+- **URL**: `/event`
+
+#### Örnek İstek:
+```bash
+GET http://localhost:3000/event
+```
+
+### 2. 'GET /event/id:eventId'
+**Açıklama**: İstenilen id'ye sahip eventin detayları döndürülür.
+
+- **Yöntem**: GET
+- **URL**: `/event/id:eventId`
+
+#### Gerekli Parametreler:
+- **eventId**: İstenilen eventin id'si (Integer).
+
+#### Örnek İstek:
+```bash
+GET http://localhost:3000/event/id1
+```
+
+### 3. `POST /event`
+**Açıklama**: Eventi kaydetmek için kullanılır.
+
+- **Yöntem**: POST
+- **URL**: `/event`
+
+#### Gerekli Parametreler:
+- **eventName**: Event adı (String).
+- **eventStatement**: Eventin durumu (String).
+- **context**: Eventin içeriği (String).
+- **eventDate**: Eventin tarihi ve saati (Date).
+- **place**: Eventin gerçekleşeceği ortam (String).
+
+#### Örnek İstek:
+```bash
+POST http://localhost:3000/event
+
+{
+  "eventName": "event-name"
+  "eventStatement": "event-statement"
+  "context": "event-context",
+  "eventDate": "29/01/2025 19:00",
+  "place": "event-place"
+}
+```
+
+### 4. `PUT /event/id:eventId`
+**Açıklama**: Event bilgilerini güncellemek için kullanılır.
+
+- **Yöntem**: PUT
+- **URL**: `/event/id:eventId`
+
+#### Gerekli Parametreler:
+- **eventId**: Güncellenecek eventin id'si (Integer).
+
+#### Örnek İstek:
+```bash
+POST http://localhost:3000/event/id1
+
+{
+  "eventName": "event-name"
+  "eventStatement": "new-event-statement"
+  "context": "new-event-context",
+  "eventDate": "29/01/2025 19:00",
+  "place": "new-event-place"
+}
+```
+
+### 5. 'DELETE /event/id:eventId'
+**Açıklama**: Belirtilen id'ye sahip event silinir.
+
+- **Yöntem**: DELETE
+- **URL**: `/event/id:eventId`
+
+#### Gerekli Parametreler:
+- **eventId**: İstenilen eventin id'si (Integer).
+
+#### Örnek İstek:
+```bash
+DELETE http://localhost:3000/event/id1
+```
+
+## Docker Komutları
+Docker konteynerlerini başlatmak için:
+```bash
+docker-compose up -d
+```
+
+Docker konteynerlerini durdurmak için:
+```bash
+docker-compose down
+```
+
+Docker konteyner loglarını görmek için:
+```bash
+docker-compose logs
+```
+
+## Proje Yapısı
+```bash
+.
+├── src/
+│   ├── app.module.ts           # Ana modül
+│   ├── event/                  # Event yönetim modülü
+│   ├── user/                   # Kullanıcı yönetimi modülü
+│   └── guard/                  # Kimlik doğrulama modülü
+├── Dockerfile                  # Uygulama için Dockerfile
+├── docker-compose.yml          # Docker Compose yapılandırma dosyası
+└── README.md                   # Proje açıklaması
+```
